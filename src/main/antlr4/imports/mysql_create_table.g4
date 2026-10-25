@@ -46,6 +46,7 @@ table_creation_option:
 	| creation_union
 	| creation_encryption
 	| creation_start_transaction
+	| creation_secondary_engine
 	| partition_by;
 
 
@@ -76,4 +77,5 @@ creation_tablespace: tablespace;
 creation_union: UNION '='? '(' name (',' name)* ')';
 creation_encryption: ENCRYPTION '='? string_literal;
 creation_start_transaction: START TRANSACTION;
+creation_secondary_engine: SECONDARY_ENGINE '='? (id | string_literal | NULL);
 
