@@ -9,7 +9,7 @@ create_table:
     | create_like_tbl
   );
 
-create_table_preamble: CREATE TEMPORARY? TABLE if_not_exists? table_name;
+create_table_preamble: CREATE (TEMPORARY | EXTERNAL)? TABLE if_not_exists? table_name;
 create_specifications: '(' create_specification (',' create_specification)* ')';
 
 create_specification:
@@ -47,6 +47,9 @@ table_creation_option:
 	| creation_encryption
 	| creation_start_transaction
 	| creation_secondary_engine
+	| creation_engine_attribute
+	| creation_secondary_engine_attribute
+	| creation_lakehouse_option
 	| partition_by;
 
 
@@ -78,4 +81,14 @@ creation_union: UNION '='? '(' name (',' name)* ')';
 creation_encryption: ENCRYPTION '='? string_literal;
 creation_start_transaction: START TRANSACTION;
 creation_secondary_engine: SECONDARY_ENGINE '='? (id | string_literal | NULL);
+creation_engine_attribute: ENGINE_ATTRIBUTE '='? string_literal;
+creation_secondary_engine_attribute: SECONDARY_ENGINE_ATTRIBUTE '='? string_literal;
+
+// HeatWave Lakehouse external table options (MySQL 9.4+), see
+// https://dev.mysql.com/doc/heatwave/en/mys-hw-lakehouse-table-syntax-sql.html
+creation_lakehouse_option:
+	  FILE_FORMAT '='? skip_parens
+	| FILES '='? skip_parens
+	| (ALLOW_MISSING_FILES | VERIFY_KEY_CONSTRAINTS | STRICT_LOAD) '='? (integer | DEFAULT)
+	| AUTO_REFRESH_SOURCE '='? (string_literal | NONE);
 
