@@ -283,7 +283,8 @@ public class DDLParserTest {
 			"ALTER TABLE orders SECONDARY_LOAD PARTITION (p0, p1) GUIDED OFF",
 			"ALTER TABLE orders SECONDARY_UNLOAD PARTITION (p0)",
 			"CREATE TABLE orders_hw (id int) ENGINE=InnoDB SECONDARY_ENGINE=RAPID",
-			"ALTER TABLE orders SECONDARY_ENGINE=NOT_AUTO",
+			"ALTER TABLE table_name SECONDARY_ENGINE=NO_AUTO",
+			"ALTER TABLE data_files_1 SECONDARY_ENGINE=NO_AUTO",
 			"ALTER TABLE orders SECONDARY_ENGINE = 'RAPID'",
 			"ALTER TABLE orders SECONDARY_ENGINE rapid",
 			"ALTER TABLE orders SECONDARY_LOAD GUIDED ON",
@@ -473,7 +474,7 @@ public class DDLParserTest {
 
 	@Test
 	public void testHeatwaveSecondaryEngineIsNoOp() {
-		TableAlter a = parseAlter("ALTER TABLE `heatwave`.`orders` SECONDARY_ENGINE=NOT_AUTO");
+		TableAlter a = parseAlter("ALTER TABLE `heatwave`.`orders` SECONDARY_ENGINE=NO_AUTO");
 		assertThat(a.database, is("heatwave"));
 		assertThat(a.table, is("orders"));
 		assertThat(a.columnMods.size(), is(0));
